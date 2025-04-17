@@ -1,0 +1,7 @@
+name: Aetheris
+version: 0.0.0
+main: dev.aetheris.Aetheris
+description: An example plugin
+author: Hugo-CASTELL
+website: https://github.com/Hugo-CASTELL/aetheris
+api-version: '1.21.5'
