@@ -15,6 +15,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
+    implementation("org.xerial:sqlite-jdbc:3.43.2.0")
 }
 
 java {
