@@ -6,15 +6,15 @@ import java.util.UUID;
 
 public class Player {
 
-    public static final String DEFAULT_SCHEME =
+    public static final String DEFAULT_SCHEME = String.format(
         """
-            CREATE TABLE IF NOT EXISTS players (
+            CREATE TABLE IF NOT EXISTS %s (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 uuid TEXT NOT NULL UNIQUE,
                 username TEXT,
                 login_count INTEGER
             );
-        """;
+        """, Player.TABLENAME);
 
     public static final String TABLENAME = "players";
     public static final String COLUMNS = "id, uuid, username, login_count";

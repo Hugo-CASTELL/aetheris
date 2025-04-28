@@ -8,11 +8,11 @@ import dev.aetheris.database.services.ServiceInteraction;
 import dev.aetheris.database.services.ServiceInteractionType;
 import dev.aetheris.database.services.ServicePlayer;
 import dev.aetheris.singleton.Singleton;
-import dev.aetheris.utils.AetherisUtils;
 import dev.aetheris.utils.DatabaseUtils;
 
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class DatabaseManager {
 
@@ -21,6 +21,7 @@ public class DatabaseManager {
     }
 
     public static void createConnectionPool() throws SQLException {
+        Singleton.ConnectionPool = new ArrayBlockingQueue<>(Rules.maxConnectionPoolSize);
         int MAX_RETRY_ATTEMPTS = Rules.maxConnectionPoolSize;
         for(int i = 0; i < Rules.maxConnectionPoolSize; i++) {
             boolean added = Singleton.ConnectionPool.offer(createConnection());
@@ -43,7 +44,7 @@ public class DatabaseManager {
     public static void releaseConnection(Connection connection) {
         boolean added = false;
         int MAX_RETRY_ATTEMPTS = Rules.maxConnectionPoolSize;
-        while (!added || MAX_RETRY_ATTEMPTS > 0) {
+        while (!added && MAX_RETRY_ATTEMPTS > 0) {
             added = Singleton.ConnectionPool.offer(connection);
             MAX_RETRY_ATTEMPTS--;
         }
@@ -84,7 +85,6 @@ public class DatabaseManager {
 
         try(Statement statement = connection.createStatement()) {
             new ServiceInteractionType(statement).updateInteractionTypes();
-            AetherisUtils.logInfo("Database utils updated successfully");
         } finally {
             releaseConnection(connection);
         }

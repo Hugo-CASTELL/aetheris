@@ -5,13 +5,13 @@ import java.sql.SQLException;
 
 public class InteractionType {
 
-    public static final String DEFAULT_SCHEME =
+    public static final String DEFAULT_SCHEME = String.format(
         """
-            CREATE TABLE IF NOT EXISTS interaction_types (
+            CREATE TABLE IF NOT EXISTS %s (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 type TEXT NOT NULL UNIQUE
             );
-        """;
+        """, InteractionType.TABLENAME);
     public static final String TABLENAME = "interaction_types";
     public static final String COLUMNS = "id, type";
 

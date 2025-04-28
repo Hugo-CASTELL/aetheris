@@ -11,16 +11,19 @@ public class AetherisUtils {
     }
 
     public static void logInfo(String message) {
-        log(message, Level.INFO, null);
+        log(message, Level.INFO);
+    }
+
+    public static void log(String message, Level level) {
+        log(message, level, null);
     }
 
     public static void log(String message, Level level, Exception e) {
-        String aetherisLog = "[Aetheris] " + message;
         if(e != null) {
-            Singleton.Logger.log(level, aetherisLog, e);
+            Singleton.Logger.log(level, message, e);
         }
         else {
-            Singleton.Logger.info(aetherisLog);
+            Singleton.Logger.log(level, message);
         }
     }
 

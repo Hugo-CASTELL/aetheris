@@ -5,20 +5,20 @@ import java.sql.SQLException;
 
 public class Interaction {
 
-    public static final String DEFAULT_SCHEME =
+    public static final String DEFAULT_SCHEME = String.format(
         """
-            CREATE TABLE IF NOT EXSISTS interactions (
+            CREATE TABLE IF NOT EXISTS %s (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 interaction_type_id INTEGER NOT NULL,
                 timestamp INTEGER NOT NULL,               -- UNIX timestamp in millis
                 player_initiator_id INTEGER,              -- initiator
                 player_recipient_id INTEGER,              -- recipient (optional)
                 context_json TEXT,                        -- JSON blob for context (optional)
-                FOREIGN KEY (player_a_id) REFERENCES players(id),
-                FOREIGN KEY (player_b_id) REFERENCES players(id),
-                FOREIGN KEY (interaction_type_id) REFERENCES interaction_types(id)
+                FOREIGN KEY (player_initiator_id) REFERENCES %s(id),
+                FOREIGN KEY (player_recipient_id) REFERENCES %s(id),
+                FOREIGN KEY (interaction_type_id) REFERENCES %s(id)
             );
-        """;
+        """, Interaction.TABLENAME, Player.TABLENAME, Player.TABLENAME, InteractionType.TABLENAME);
     public static final String TABLENAME = "interactions";
     public static final String COLUMNS = "id, interaction_type_id, timestamp, player_initiator_id, player_recipient_id, context_json";
 
