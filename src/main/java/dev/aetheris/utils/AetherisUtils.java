@@ -2,6 +2,7 @@ package dev.aetheris.utils;
 
 import dev.aetheris.Rules;
 import dev.aetheris.singleton.Singleton;
+import org.bukkit.Bukkit;
 
 import java.util.logging.Level;
 
@@ -44,6 +45,14 @@ public class AetherisUtils {
 
     public static double decrease(double initial, int percentage) {
         return initial - (initial * percentage / 100);
+    }
+
+    public static void runAsyncronously(Runnable runnable) {
+        Bukkit.getScheduler().runTaskAsynchronously(Singleton.getInstance().getPlugin(), runnable);
+    }
+
+    public static void runSyncronously(Runnable runnable) {
+        Bukkit.getScheduler().runTask(Singleton.getInstance().getPlugin(), runnable);
     }
 
 }

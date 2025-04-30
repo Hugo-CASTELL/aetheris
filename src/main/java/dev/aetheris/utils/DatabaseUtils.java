@@ -1,8 +1,12 @@
 package dev.aetheris.utils;
 
+import dev.aetheris.database.DatabaseManager;
 import dev.aetheris.database.models.Players;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 public class DatabaseUtils {
@@ -60,6 +64,34 @@ public class DatabaseUtils {
             joinColumns(columnsWithoutId),
             joinValues(orderValuesFromColumns(columnsWithoutId, orderedValues))
         );
+    }
+
+    @FunctionalInterface
+    public interface SQLStatementConsumer {
+        void accept(Statement statement) throws SQLException;
+    }
+
+    public static void runAsynchronously(String failWarningMessage, SQLStatementConsumer action) {
+        AetherisUtils.runAsyncronously (() -> {
+            Connection connection = null;
+            try {
+                connection = DatabaseManager.getConnection();
+
+                try (Statement statement = connection.createStatement()) {
+                    action.accept(statement);
+                }
+            } catch (InterruptedException | SQLException e){
+                AetherisUtils.logWarn(failWarningMessage, e);
+            } finally {
+                if(connection != null){
+                    try{
+                        DatabaseManager.releaseConnection(connection);
+                    } catch (Exception e) {
+                        AetherisUtils.logWarn("Failed to release connection", e);
+                    }
+                }
+            }
+        });
     }
 
 }

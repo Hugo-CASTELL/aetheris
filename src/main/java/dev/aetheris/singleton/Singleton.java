@@ -2,6 +2,8 @@ package dev.aetheris.singleton;
 
 import dev.aetheris.database.enums.InteractionType;
 import dev.aetheris.database.models.Players;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.sql.Connection;
@@ -20,6 +22,7 @@ public class Singleton {
         return SingletonHolder.INSTANCE;
     }
 
+    private Plugin plugin;
     private Logger logger;
     private File dataFolder;
 
@@ -29,6 +32,14 @@ public class Singleton {
     private Map<UUID, Players> players;
 
     private Singleton() { }
+
+    public @NotNull Plugin getPlugin() {
+        return plugin;
+    }
+
+    public void setPlugin(Plugin plugin) {
+        this.plugin = plugin;
+    }
 
     public Logger getLogger() {
         return logger;

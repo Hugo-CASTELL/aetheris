@@ -19,6 +19,7 @@ public class Aetheris extends JavaPlugin implements Listener {
         // #---------------------------------#
         // # Initialize some Singleton parts #
         // #---------------------------------#
+        Singleton.getInstance().setPlugin(this);
         Singleton.getInstance().setLogger(this.getLogger());
         Singleton.getInstance().setDataFolder(this.getDataFolder());
 
