@@ -3,7 +3,7 @@ package dev.aetheris.database.models;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Interaction {
+public class Interactions {
 
     public static final String DEFAULT_SCHEME = String.format(
         """
@@ -18,7 +18,7 @@ public class Interaction {
                 FOREIGN KEY (player_recipient_id) REFERENCES %s(id),
                 FOREIGN KEY (interaction_type_id) REFERENCES %s(id)
             );
-        """, Interaction.TABLENAME, Player.TABLENAME, Player.TABLENAME, InteractionType.TABLENAME);
+        """, Interactions.TABLENAME, Players.TABLENAME, Players.TABLENAME, InteractionTypes.TABLENAME);
     public static final String TABLENAME = "interactions";
     public static final String COLUMNS = "id, interaction_type_id, timestamp, player_initiator_id, player_recipient_id, context_json";
 
@@ -29,7 +29,7 @@ public class Interaction {
     private final int player_recipient_id;
     private final String context_json;
 
-    public Interaction(ResultSet rs) throws SQLException {
+    public Interactions(ResultSet rs) throws SQLException {
         this.id = rs.getInt("id");
         this.interaction_type_id = rs.getInt("interaction_type_id");
         this.timestamp = rs.getLong("timestamp");

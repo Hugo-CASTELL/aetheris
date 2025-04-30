@@ -14,6 +14,14 @@ public class AetherisUtils {
         log(message, Level.INFO);
     }
 
+    public static void logWarn(String message) {
+        log(message, Level.WARNING);
+    }
+
+    public static void logWarn(String message, Exception e) {
+        log(message, Level.WARNING, e);
+    }
+
     public static void log(String message, Level level) {
         log(message, level, null);
     }

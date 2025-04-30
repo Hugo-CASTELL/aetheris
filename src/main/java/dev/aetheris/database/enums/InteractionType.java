@@ -1,6 +1,6 @@
 package dev.aetheris.database.enums;
 
-public enum InteractionTypes {
+public enum InteractionType {
     PICKUP_ITEM,
     DROP_ITEM,
     DAMAGE_PLAYER,

@@ -1,7 +1,7 @@
 package dev.aetheris.singleton;
 
-import dev.aetheris.database.enums.InteractionTypes;
-import dev.aetheris.database.models.Player;
+import dev.aetheris.database.enums.InteractionType;
+import dev.aetheris.database.models.Players;
 
 import java.io.File;
 import java.sql.Connection;
@@ -17,7 +17,7 @@ public class Singleton {
 
     public static BlockingQueue<Connection> ConnectionPool;
 
-    public static HashMap<InteractionTypes, Integer> InteractionTypes;
-    public static HashMap<UUID, Player> Players;
+    public static HashMap<InteractionType, Integer> InteractionTypes;
+    public static HashMap<UUID, Players> Players;
 
 }
