@@ -21,7 +21,7 @@ public class SolidarityListener implements Listener {
 
         if(PlayerUtils.isEVP(damager, defender) &&
            PlayerUtils.isSoloPlayer((Player) defender)){
-            event.setDamage(AetherisUtils.increase(event.getDamage(), Rules.NERF_solidarity_soloPlayerEVPDamagePercentageIgnored));
+            event.setDamage(AetherisUtils.increase(event.getDamage(), Rules.NERF_SOLIDARITY_SOLO_PLAYER_EVP_DAMAGE_PERCENTAGE_IGNORED));
         }
     }
 
@@ -32,7 +32,7 @@ public class SolidarityListener implements Listener {
 
         if(PlayerUtils.isPVE(damager, defender) &&
            !ServerUtils.isUniquePlayerConnected()) {
-            event.setDamage(AetherisUtils.increase(event.getDamage(), Math.min(Rules.BUFF_solidarity_multiPlayerPVEDamagePercentagePerNearbyAlly * ServerUtils.countPlayersAroundPlayer((Player) damager), Rules.BUFF_solidarity_multiPlayerPVEDamagePercentagePerNearbyAllyMax)));
+            event.setDamage(AetherisUtils.increase(event.getDamage(), Math.min(Rules.BUFF_SOLIDARITY_MULTI_PLAYER_PVE_DAMAGE_PERCENTAGE_PER_NEARBY_ALLY * ServerUtils.countPlayersAroundPlayer((Player) damager), Rules.BUFF_SOLIDARITY_MULTI_PLAYER_PVE_DAMAGE_PERCENTAGE_PER_NEARBY_ALLY_MAX)));
         }
     }
 
@@ -42,7 +42,7 @@ public class SolidarityListener implements Listener {
 
         if(PlayerUtils.isPlayer(entity) &&
            PlayerUtils.isSoloPlayer((Player) entity)){
-            event.setAmount(AetherisUtils.decrease(event.getAmount(), Rules.NERF_solidarity_soloPlayerRegainHealthPercentageIgnored));
+            event.setAmount(AetherisUtils.decrease(event.getAmount(), Rules.NERF_SOLIDARITY_SOLO_PLAYER_REGAIN_HEALTH_PERCENTAGE_IGNORED));
         }
 
     }

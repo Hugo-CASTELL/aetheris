@@ -24,10 +24,9 @@ public class ServiceInteractionType extends Service<InteractionTypes> {
 
     public void updateInteractionTypes() throws SQLException {
         for (InteractionType type : InteractionType.values()) {
-            statement.executeUpdate(
-                "INSERT OR IGNORE INTO " + InteractionTypes.TABLENAME + " (type) VALUES ('" + type.name() + "')"
-            );
+            statement.addBatch("INSERT OR IGNORE INTO " + InteractionTypes.TABLENAME + " (type) VALUES ('" + type.name() + "')");
         }
+        statement.executeBatch();
     }
 
     @Override

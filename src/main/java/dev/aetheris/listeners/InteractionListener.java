@@ -20,7 +20,7 @@ public class InteractionListener implements Listener {
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
-        Players savedPlayer = Singleton.Players.get(player.getUniqueId());
+        Players savedPlayer = Singleton.getInstance().getPlayers().get(player.getUniqueId());
 
         Connection connection = null;
         try {
@@ -32,7 +32,7 @@ public class InteractionListener implements Listener {
                 Players playerInDb = savedPlayer == null ? servicePlayer.insertGet(new Players(player)) :
                                                            servicePlayer.updateGet(savedPlayer, EventType.PLAYER_LOGIN);
 
-                Singleton.Players.put(player.getUniqueId(), playerInDb);
+                Singleton.getInstance().getPlayers().put(player.getUniqueId(), playerInDb);
             }
 
         } catch (InterruptedException | SQLException e){

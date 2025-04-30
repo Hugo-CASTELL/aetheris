@@ -1,13 +1,16 @@
 package dev.aetheris.utils;
 
+import dev.aetheris.Rules;
 import dev.aetheris.singleton.Singleton;
 
 import java.util.logging.Level;
 
 public class AetherisUtils {
 
+    private AetherisUtils() { }
+
     public static String getDatabaseFilename() {
-        return "aetheris.db";
+        return Rules.AETHERIS_DB;
     }
 
     public static void logInfo(String message) {
@@ -28,10 +31,10 @@ public class AetherisUtils {
 
     public static void log(String message, Level level, Exception e) {
         if(e != null) {
-            Singleton.Logger.log(level, message, e);
+            Singleton.getInstance().getLogger().log(level, message, e);
         }
         else {
-            Singleton.Logger.log(level, message);
+            Singleton.getInstance().getLogger().log(level, message);
         }
     }
 

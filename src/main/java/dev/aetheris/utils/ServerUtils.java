@@ -4,11 +4,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.List;
 
 public class ServerUtils {
 
-    public static Collection<? extends Player> getOnlinePlayers() {
-        return Bukkit.getServer().getOnlinePlayers();
+    private ServerUtils() { }
+
+    public static Collection<Player> getOnlinePlayers() {
+        return List.copyOf(Bukkit.getServer().getOnlinePlayers());
     }
 
     public static int countConnectedPlayers(){
@@ -27,10 +30,8 @@ public class ServerUtils {
             int playerCount = 0;
 
             for(Player otherPlayer : getOnlinePlayers()){
-                if(!otherPlayer.getUniqueId().equals(player.getUniqueId())){
-                    if(PlayerUtils.areTogether(player, otherPlayer)){
+                if(!otherPlayer.getUniqueId().equals(player.getUniqueId()) && PlayerUtils.areTogether(player, otherPlayer)){
                         playerCount++;
-                    }
                 }
             }
 

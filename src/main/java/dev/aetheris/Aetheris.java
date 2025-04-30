@@ -19,14 +19,14 @@ public class Aetheris extends JavaPlugin implements Listener {
         // #---------------------------------#
         // # Initialize some Singleton parts #
         // #---------------------------------#
-        Singleton.Logger = getLogger();
-        Singleton.DataFolder = getDataFolder();
+        Singleton.getInstance().setLogger(this.getLogger());
+        Singleton.getInstance().setDataFolder(this.getDataFolder());
 
         // #----------------------------------#
         // # Plugin folder creation or update #
         // #----------------------------------#
-        if(!Singleton.DataFolder.exists() || !Singleton.DataFolder.isDirectory()){
-            if(Singleton.DataFolder.mkdirs()) {
+        if(!Singleton.getInstance().getDataFolder().exists() || !Singleton.getInstance().getDataFolder().isDirectory()){
+            if(Singleton.getInstance().getDataFolder().mkdirs()) {
                 AetherisUtils.logInfo("Plugin folder created successfully");
             } else {
                 AetherisUtils.log("Failed to create plugin folder. Enable aborted.", Level.SEVERE);
@@ -66,7 +66,7 @@ public class Aetheris extends JavaPlugin implements Listener {
         // #---------------#
         // # Plugin tweaks #
         // #---------------#
-        if(Rules.activateSolidarityTweaks) registerListener(new SolidarityListener());
+        if(Rules.ACTIVATE_SOLIDARITY_TWEAKS) registerListener(new SolidarityListener());
 
         // #----------------#
         // # Plugin enabled #

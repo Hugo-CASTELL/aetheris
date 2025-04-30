@@ -7,6 +7,8 @@ import java.util.*;
 
 public class DatabaseUtils {
 
+    private DatabaseUtils() { }
+
     public static String getDatabaseConnectionString(File dataFolder) {
         return "jdbc:sqlite:" + dataFolder + "/" + AetherisUtils.getDatabaseFilename();
     }
@@ -23,25 +25,19 @@ public class DatabaseUtils {
         List<String> orderedValuesList = new ArrayList<>();
         for (String column : columns) {
             Object value = orderedValues.get(column);
-            if (value != null) {
-                String valueString = "";
-                if(value instanceof String string){
-                    valueString = string.isBlank() ? "NULL" : "'" + string + "'";
-                } else if (value instanceof Character character) {
-                    valueString = "'" + character + "'";
-                } else if (value instanceof Boolean bool) {
-                    valueString = bool ? "1" : "0";
-                } else if (value instanceof UUID uuid) {
-                    valueString = "'" + uuid + "'";
-                } else if (value instanceof Date date) {
-                    valueString = "'" + date + "'";
-                } else {
-                    valueString = String.valueOf(value);
-                }
-                orderedValuesList.add(valueString);
-            } else {
+            if(value == null) {
                 orderedValuesList.add("NULL");
+                continue;
             }
+            String valueString = switch (value) {
+                case String s    -> s.isBlank() ? "NULL" : "'" + s + "'";
+                case Character c -> "'" + c + "'";
+                case Boolean b   -> Boolean.TRUE.equals(b) ? "1" : "0";
+                case UUID uuid   -> "'" + uuid + "'";
+                case Date date   -> "'" + date + "'";
+                default          -> String.valueOf(value);
+            };
+            orderedValuesList.add(valueString);
         }
         return orderedValuesList;
     }

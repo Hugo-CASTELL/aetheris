@@ -12,5 +12,4 @@ public enum InteractionType {
     public String getDatabaseValue() {
         return this.name().toLowerCase();
     }
-
 }

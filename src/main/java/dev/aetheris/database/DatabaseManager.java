@@ -16,24 +16,25 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class DatabaseManager {
 
+    private DatabaseManager() { }
+
     private static Connection createConnection() throws SQLException {
-        return DriverManager.getConnection(DatabaseUtils.getDatabaseConnectionString(Singleton.DataFolder));
+        return DriverManager.getConnection(DatabaseUtils.getDatabaseConnectionString(Singleton.getInstance().getDataFolder()));
     }
 
     public static void createConnectionPool() throws SQLException {
-        Singleton.ConnectionPool = new ArrayBlockingQueue<>(Rules.maxConnectionPoolSize);
-        int MAX_RETRY_ATTEMPTS = Rules.maxConnectionPoolSize;
-        for(int i = 0; i < Rules.maxConnectionPoolSize; i++) {
-            boolean added = Singleton.ConnectionPool.offer(createConnection());
-            if(!added && MAX_RETRY_ATTEMPTS > 0) {
-                i--;
-                MAX_RETRY_ATTEMPTS--;
+        Singleton.getInstance().setConnectionPool(new ArrayBlockingQueue<>(Rules.MAX_CONNECTION_POOL_SIZE));
+        int maxRetryAttempts = Rules.MAX_CONNECTION_POOL_SIZE;
+        while (Singleton.getInstance().getConnectionPool().remainingCapacity() != 0 && maxRetryAttempts > 0) {
+            boolean added = Singleton.getInstance().getConnectionPool().offer(createConnection());
+            if(!added) {
+                maxRetryAttempts--;
             }
         }
     }
 
     public static Connection getConnection() throws InterruptedException, SQLException {
-        Connection take = Singleton.ConnectionPool.take();
+        Connection take = Singleton.getInstance().getConnectionPool().take();
         if(!take.isClosed()) {
             return take;
         } else {
@@ -43,24 +44,24 @@ public class DatabaseManager {
 
     public static void releaseConnection(Connection connection) {
         boolean added = false;
-        int MAX_RETRY_ATTEMPTS = Rules.maxConnectionPoolSize;
-        while (!added && MAX_RETRY_ATTEMPTS > 0) {
-            added = Singleton.ConnectionPool.offer(connection);
-            MAX_RETRY_ATTEMPTS--;
+        int maxRetryAttempts = Rules.MAX_CONNECTION_POOL_SIZE;
+        while (!added && maxRetryAttempts > 0) {
+            added = Singleton.getInstance().getConnectionPool().offer(connection);
+            maxRetryAttempts--;
         }
     }
 
     public static void releaseConnectionPool() throws SQLException {
         boolean wentWrong = false;
-        for(Connection c : Singleton.ConnectionPool) {
+        for(Connection c : Singleton.getInstance().getConnectionPool()) {
             if(c != null && !c.isClosed()) {
                 c.close();
-                boolean removed = Singleton.ConnectionPool.remove(c);
+                boolean removed = Singleton.getInstance().getConnectionPool().remove(c);
                 if(!removed) wentWrong = true;
             }
         }
         if(wentWrong) {
-            Singleton.ConnectionPool.clear();
+            Singleton.getInstance().getConnectionPool().clear();
         }
     }
 
@@ -94,14 +95,14 @@ public class DatabaseManager {
         Connection connection = getConnection();
 
         try(Statement statement = connection.createStatement()){
-            Singleton.Players = new HashMap<>();
+            Singleton.getInstance().setPlayers(new HashMap<>());
             for(Players player : new ServicePlayer(statement).getAll()) {
-                Singleton.Players.put(player.getUuid(), player);
+                Singleton.getInstance().getPlayers().put(player.getUuid(), player);
             }
-            Singleton.InteractionTypes = new HashMap<>();
+            Singleton.getInstance().setInteractionTypes(new EnumMap<>(InteractionType.class));
             for(InteractionTypes interactionType : new ServiceInteractionType(statement).getAll()) {
                 InteractionType correspondingEnum = InteractionType.valueOf(interactionType.getType());
-                Singleton.InteractionTypes.put(correspondingEnum, interactionType.getId());
+                Singleton.getInstance().getInteractionTypes().put(correspondingEnum, interactionType.getId());
             }
         } finally {
             releaseConnection(connection);

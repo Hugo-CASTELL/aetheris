@@ -4,8 +4,6 @@ import dev.aetheris.database.enums.EventType;
 import dev.aetheris.database.models.Players;
 import dev.aetheris.utils.AetherisUtils;
 import dev.aetheris.utils.DatabaseUtils;
-import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;

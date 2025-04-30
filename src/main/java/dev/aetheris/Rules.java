@@ -2,16 +2,19 @@ package dev.aetheris;
 
 public class Rules {
 
-    public static boolean activateSolidarityTweaks = true;
+    private Rules() { }
 
-    public static int chunksRadiusToBeConsideredAlone = 6;
+    public static final boolean ACTIVATE_SOLIDARITY_TWEAKS = true;
 
-    public static int NERF_solidarity_soloPlayerEVPDamagePercentageIgnored = 30;
-    public static int NERF_solidarity_soloPlayerRegainHealthPercentageIgnored = 30;
-    public static int BUFF_solidarity_multiPlayerPVEDamagePercentagePerNearbyAlly = 3;
-    public static int BUFF_solidarity_multiPlayerPVEDamagePercentagePerNearbyAllyMax = 9;
+    public static final int CHUNKS_RADIUS_TO_BE_CONSIDERED_ALONE = 6;
 
-    public static int maxConnectionPoolSize = 20;
+    public static final int NERF_SOLIDARITY_SOLO_PLAYER_EVP_DAMAGE_PERCENTAGE_IGNORED = 30;
+    public static final int NERF_SOLIDARITY_SOLO_PLAYER_REGAIN_HEALTH_PERCENTAGE_IGNORED = 30;
+    public static final int BUFF_SOLIDARITY_MULTI_PLAYER_PVE_DAMAGE_PERCENTAGE_PER_NEARBY_ALLY = 3;
+    public static final int BUFF_SOLIDARITY_MULTI_PLAYER_PVE_DAMAGE_PERCENTAGE_PER_NEARBY_ALLY_MAX = 9;
 
-    public static int blocksRadiusToBeConsideredAlone = chunksRadiusToBeConsideredAlone * 16;
+    public static final String AETHERIS_DB = "aetheris.db";
+    public static final int MAX_CONNECTION_POOL_SIZE = 20;
+
+    public static final int BLOCKS_RADIUS_TO_BE_CONSIDERED_ALONE = CHUNKS_RADIUS_TO_BE_CONSIDERED_ALONE * 16;
 }

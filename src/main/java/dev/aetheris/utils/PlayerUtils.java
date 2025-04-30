@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 
 public class PlayerUtils {
 
+    private PlayerUtils() { }
+
     public static boolean isSoloPlayer(Player player) {
         return !ServerUtils.isUniquePlayerConnected() && ServerUtils.isPlayerAlone(player);
     }
@@ -32,7 +34,7 @@ public class PlayerUtils {
         Location loc1 = player1.getLocation();
         Location loc2 = player2.getLocation();
 
-        return Math.sqrt(Math.pow(loc2.getBlockX() - loc1.getBlockX(), 2) + Math.pow(loc2.getBlockY() - loc1.getBlockY(), 2)) <= Rules.blocksRadiusToBeConsideredAlone;
+        return Math.sqrt(Math.pow((double)loc2.getBlockX() - loc1.getBlockX(), 2) + Math.pow((double)loc2.getBlockY() - loc1.getBlockY(), 2)) <= Rules.BLOCKS_RADIUS_TO_BE_CONSIDERED_ALONE;
     }
 
 }

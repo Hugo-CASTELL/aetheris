@@ -5,49 +5,63 @@ import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Players {
+
+    public static final String TABLENAME = "players";
+
+    public static final class Columns {
+        private Columns() { }
+        public static final String ID = "id";
+        public static final String UUID = "uuid";
+        public static final String USERNAME = "username";
+        public static final String LOGIN_COUNT = "login_count";
+    }
+
+    public static final List<String> COLUMNS_LIST = List.of(
+        Columns.ID,
+        Columns.UUID,
+        Columns.USERNAME,
+        Columns.LOGIN_COUNT
+    );
+
+    public static final String COLUMNS = DatabaseUtils.joinColumns(COLUMNS_LIST);
 
     public static final String DEFAULT_SCHEME = String.format(
         """
             CREATE TABLE IF NOT EXISTS %s (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                uuid TEXT NOT NULL UNIQUE,
-                username TEXT,
-                login_count INTEGER
+                %s INTEGER PRIMARY KEY AUTOINCREMENT,
+                %s TEXT NOT NULL UNIQUE,
+                %s TEXT,
+                %s INTEGER
             );
-        """, Players.TABLENAME);
-
-    public static final String TABLENAME = "players";
-    public static final List<String> COLUMNS_LIST = Arrays.asList(
-            "id",
-            "uuid",
-            "username",
-            "login_count"
+        """,
+        TABLENAME,
+        Columns.ID,
+        Columns.UUID,
+        Columns.USERNAME,
+        Columns.LOGIN_COUNT
     );
-    public static final String COLUMNS = DatabaseUtils.joinColumns(COLUMNS_LIST);
 
     private final int id;
     private final UUID uuid;
     private final String username;
-    private int loginCount;
+    private final int loginCount;
 
     public Players(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.uuid = UUID.fromString(rs.getString("uuid"));
-        this.username = rs.getString("username");
-        this.loginCount = rs.getInt("login_count");
+        this(rs.getInt(Columns.ID), UUID.fromString(rs.getString(Columns.UUID)), rs.getString(Columns.USERNAME), rs.getInt(Columns.LOGIN_COUNT));
     }
 
     public Players(Player player) {
-        this.id = -1; // Not set yet
-        this.uuid = player.getUniqueId();
-        this.username = player.getName();
-        this.loginCount = 1; // Default value
+        this(-1, player.getUniqueId(), player.getName(), 1 );
+    }
+
+    private Players(int id, UUID uuid, String username, int loginCount) {
+        this.id = id;
+        this.uuid = uuid;
+        this.username = username;
+        this.loginCount = loginCount;
     }
 
     public int getId() {
@@ -64,10 +78,10 @@ public class Players {
 
     public Map<String, Object> toMap() {
         return Map.of(
-            "id", id,
-            "uuid", uuid.toString(),
-            "username", username,
-            "login_count", loginCount
+                Columns.ID, id,
+                Columns.UUID, uuid.toString(),
+                Columns.USERNAME, username,
+                Columns.LOGIN_COUNT, loginCount
         );
     }
 }

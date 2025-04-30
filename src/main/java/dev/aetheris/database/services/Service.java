@@ -1,7 +1,6 @@
 package dev.aetheris.database.services;
 
 import dev.aetheris.database.enums.EventType;
-import dev.aetheris.database.models.Players;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
@@ -12,7 +11,7 @@ public abstract class Service<T> {
 
     protected final Statement statement;
 
-    public Service(Statement stmt) {
+    protected Service(Statement stmt) {
         this.statement = stmt;
     }
 

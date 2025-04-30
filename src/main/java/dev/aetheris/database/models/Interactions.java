@@ -2,39 +2,76 @@ package dev.aetheris.database.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Interactions {
+
+    public static final String TABLENAME = "interactions";
+
+    public static final class Columns {
+        private Columns() {}
+        public static final String ID = "id";
+        public static final String INTERACTION_TYPE_ID = "interaction_type_id";
+        public static final String TIMESTAMP = "timestamp";
+        public static final String PLAYER_INITIATOR_ID = "player_initiator_id";
+        public static final String PLAYER_RECIPIENT_ID = "player_recipient_id";
+        public static final String CONTEXT_JSON = "context_json";
+    }
+
+    public static final List<String> COLUMNS_LIST = List.of(
+        Columns.ID,
+        Columns.INTERACTION_TYPE_ID,
+        Columns.TIMESTAMP,
+        Columns.PLAYER_INITIATOR_ID,
+        Columns.PLAYER_RECIPIENT_ID,
+        Columns.CONTEXT_JSON
+    );
+
+    public static final String COLUMNS = String.join(", ", COLUMNS_LIST);
 
     public static final String DEFAULT_SCHEME = String.format(
         """
             CREATE TABLE IF NOT EXISTS %s (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                interaction_type_id INTEGER NOT NULL,
-                timestamp INTEGER NOT NULL,               -- UNIX timestamp in millis
-                player_initiator_id INTEGER,              -- initiator
-                player_recipient_id INTEGER,              -- recipient (optional)
-                context_json TEXT,                        -- JSON blob for context (optional)
-                FOREIGN KEY (player_initiator_id) REFERENCES %s(id),
-                FOREIGN KEY (player_recipient_id) REFERENCES %s(id),
-                FOREIGN KEY (interaction_type_id) REFERENCES %s(id)
+                %s INTEGER PRIMARY KEY AUTOINCREMENT,
+                %s INTEGER NOT NULL,
+                %s INTEGER NOT NULL,
+                %s INTEGER,
+                %s INTEGER,
+                %s TEXT,
+                FOREIGN KEY (%s) REFERENCES %s(%s),
+                FOREIGN KEY (%s) REFERENCES %s(%s),
+                FOREIGN KEY (%s) REFERENCES %s(%s)
             );
-        """, Interactions.TABLENAME, Players.TABLENAME, Players.TABLENAME, InteractionTypes.TABLENAME);
-    public static final String TABLENAME = "interactions";
-    public static final String COLUMNS = "id, interaction_type_id, timestamp, player_initiator_id, player_recipient_id, context_json";
+        """,
+        TABLENAME,
+        Columns.ID,
+        Columns.INTERACTION_TYPE_ID,
+        Columns.TIMESTAMP,
+        Columns.PLAYER_INITIATOR_ID,
+        Columns.PLAYER_RECIPIENT_ID,
+        Columns.CONTEXT_JSON,
+        Columns.PLAYER_INITIATOR_ID, Players.TABLENAME, Players.Columns.ID,
+        Columns.PLAYER_RECIPIENT_ID, Players.TABLENAME, Players.Columns.ID,
+        Columns.INTERACTION_TYPE_ID, InteractionTypes.TABLENAME, Interactions.Columns.ID
+    );
 
     private final int id;
-    private final int interaction_type_id;
+    private final int interactionTypeId;
     private final long timestamp;
-    private final int player_initiator_id;
-    private final int player_recipient_id;
-    private final String context_json;
+    private final int playerInitiatorId;
+    private final int playerRecipientId;
+    private final String contextJson;
 
     public Interactions(ResultSet rs) throws SQLException {
-        this.id = rs.getInt("id");
-        this.interaction_type_id = rs.getInt("interaction_type_id");
-        this.timestamp = rs.getLong("timestamp");
-        this.player_initiator_id = rs.getInt("player_initiator_id");
-        this.player_recipient_id = rs.getInt("player_recipient_id");
-        this.context_json = rs.getString("context_json");
+        this(rs.getInt(Columns.ID), rs.getInt(Columns.INTERACTION_TYPE_ID), rs.getLong(Columns.TIMESTAMP), rs.getInt(Columns.PLAYER_INITIATOR_ID), rs.getInt(Columns.PLAYER_RECIPIENT_ID), rs.getString(Columns.CONTEXT_JSON));
+    }
+
+    private Interactions(int id, int interactionTypeId, long timestamp, int playerInitiatorId, int playerRecipientId, String contextJson) {
+        this.id = id;
+        this.interactionTypeId = interactionTypeId;
+        this.timestamp = timestamp;
+        this.playerInitiatorId = playerInitiatorId;
+        this.playerRecipientId = playerRecipientId;
+        this.contextJson = contextJson;
     }
 }
