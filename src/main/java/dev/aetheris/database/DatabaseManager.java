@@ -1,9 +1,7 @@
 package dev.aetheris.database;
 
 import dev.aetheris.Rules;
-import dev.aetheris.database.enums.InteractionType;
-import dev.aetheris.database.models.InteractionTypes;
-import dev.aetheris.database.models.Players;
+import dev.aetheris.cache.Cache;
 import dev.aetheris.database.services.ServiceInteraction;
 import dev.aetheris.database.services.ServiceInteractionType;
 import dev.aetheris.database.services.ServicePlayer;
@@ -11,7 +9,6 @@ import dev.aetheris.singleton.Singleton;
 import dev.aetheris.utils.DatabaseUtils;
 
 import java.sql.*;
-import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class DatabaseManager {
@@ -95,15 +92,8 @@ public class DatabaseManager {
         Connection connection = getConnection();
 
         try(Statement statement = connection.createStatement()){
-            Singleton.getInstance().setPlayers(new HashMap<>());
-            for(Players player : new ServicePlayer(statement).getAll()) {
-                Singleton.getInstance().getPlayers().put(player.getUuid(), player);
-            }
-            Singleton.getInstance().setInteractionTypes(new EnumMap<>(InteractionType.class));
-            for(InteractionTypes interactionType : new ServiceInteractionType(statement).getAll()) {
-                InteractionType correspondingEnum = InteractionType.valueOf(interactionType.getType());
-                Singleton.getInstance().getInteractionTypes().put(correspondingEnum, interactionType.getId());
-            }
+            Cache.PLAYER_CACHE.putMultiple(new ServicePlayer(statement).getAll());
+            Cache.INTERACTION_TYPE_CACHE.putMultiple(new ServiceInteractionType(statement).getAll());
         } finally {
             releaseConnection(connection);
         }

@@ -2,6 +2,7 @@ package dev.aetheris.utils;
 
 import dev.aetheris.database.DatabaseManager;
 import dev.aetheris.database.models.Players;
+import dev.aetheris.exception.AetherisRuntimeException;
 
 import java.io.File;
 import java.sql.Connection;
@@ -80,7 +81,7 @@ public class DatabaseUtils {
                 try (Statement statement = connection.createStatement()) {
                     action.accept(statement);
                 }
-            } catch (InterruptedException | SQLException e){
+            } catch (InterruptedException | SQLException | AetherisRuntimeException e){
                 AetherisUtils.logWarn(failWarningMessage, e);
             } finally {
                 if(connection != null){

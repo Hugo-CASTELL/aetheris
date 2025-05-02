@@ -78,10 +78,10 @@ public class Players {
 
     public Map<String, Object> toMap() {
         return Map.of(
-                Columns.ID, id,
-                Columns.UUID, uuid.toString(),
-                Columns.USERNAME, username,
-                Columns.LOGIN_COUNT, loginCount
+            Columns.ID, id,
+            Columns.UUID, uuid.toString(),
+            Columns.USERNAME, username,
+            Columns.LOGIN_COUNT, loginCount
         );
     }
 }

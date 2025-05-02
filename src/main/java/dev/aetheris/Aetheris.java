@@ -60,7 +60,7 @@ public class Aetheris extends JavaPlugin implements Listener {
         }
 
         // #--------------------------------#
-        // # Register interaction listening #
+        // # Registers interaction listener #
         // #--------------------------------#
         registerListener(new InteractionListener());
 

@@ -54,5 +54,4 @@ public class AetherisUtils {
     public static void runSyncronously(Runnable runnable) {
         Bukkit.getScheduler().runTask(Singleton.getInstance().getPlugin(), runnable);
     }
-
 }
