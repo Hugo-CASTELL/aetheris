@@ -7,9 +7,5 @@ public enum InteractionType {
     HEAL_PLAYER,
     CHAT_MESSAGE,
     BLOCK_BREAK,
-    BLOCK_PLACE;
-
-    public String getDatabaseValue() {
-        return this.name().toLowerCase();
-    }
+    BLOCK_PLACE
 }
